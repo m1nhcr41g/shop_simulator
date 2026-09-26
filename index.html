@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="mobile-app-frame">
+        
+        <!-- TRANG CHỦ -->
+        <section id="phase-home" class="app-body home-screen">
+            <div class="home-brand">
+                <h1 class="home-title">Của hàng của Bùi Minh Quốc</h1>
+                <p class="home-subtitle">Game shop simulator</p>
+            </div>
+
+            <div class="home-menu-actions">
+                <button id="btn-continue-game" class="btn-home-primary hidden" onclick="continueGame()">
+                    CHƠI TIẾP
+                    <small id="save-info-text">Ngày 1 · 3000k</small>
+                </button>
+
+                <button id="btn-new-game" class="btn-home-secondary" onclick="startNewGame()">
+                    CHƠI MỚI ĐÊ
+                </button>
+
+                <button class="btn-home-sub" onclick="openHowToPlay()">
+                    HƯỚNG DẪN CHƠI
+                </button>
+            </div>
+
+            <div class="home-footer">
+                <span class="version-tag">Đang trong quá trình demo</span>
+            </div>
+        </section>
+
+        <!-- MODAL HƯỚNG DẪN -->
+        <div id="howto-modal" class="modal-overlay-custom hidden">
+            <div class="modal-card-custom">
+                <h3>HƯỚNG DẪN CHƠI</h3>
+                <ul class="howto-list">
+                    <li><strong>1. Tài chính:</strong> Giá game & vốn nhập cao. Hãy tính toán kĩ lợi nhuận trước khi nhập hàng!</li>
+                    <li><strong>2. Grab tất xanh:</strong> Có tỉ lệ cảnh sát kiểm tra đột xuất. Nếu bán đĩa lậu cho công an, bạn sẽ bị phạt cực nặng. Better call Saul!</li>
+                    <li><strong>3. Hết hàng:</strong> Nếu không đủ hàng, thì chỉ có cách báo hết hàng. Khách sẽ phàn nàn và trừ Uy tín.</li>
+                    <li><strong>4. Thua game:</strong> Bị cạn vốn, âm tiền phạt, mất hết Uy tín hoặc trễ hạn phục vụ. Cái này là do bạn quá ngu</li>
+                </ul>
+                <button class="btn-main-red" onclick="closeHowToPlay()">Toi Dong Tinh</button>
+            </div>
+        </div>
+
+        <!-- HEADER IN-GAME -->
+        <header id="game-header" class="app-header hidden">
+            <div class="brand">
+                <button class="btn-icon-back" onclick="returnToHome()" title="Về trang chủ">HOME</button>
+                <span class="logo-text">PIXEL VAULT</span>
+            </div>
+            <div class="header-stats">
+                <div class="stat"><span>NGÀY</span><strong id="disp-day">1</strong></div>
+                <div class="stat"><span>VỐN</span><strong id="disp-cash">3000k</strong></div>
+                <div class="stat"><span>UY TÍN</span><strong id="disp-rep">★ 4.5</strong></div>
+            </div>
+        </header>
+
+        <!-- PHASE 1: RESTOCK -->
+        <section id="phase-restock" class="app-body hidden">
+            <div class="section-banner">
+                <h2>Chuẩn bị buổi sáng</h2>
+                <p>Khách dự kiến hôm nay: 5 người · Quản lý dòng tiền cẩn thận.</p>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchRestockTab('official')">Đĩa Bản Quyền</button>
+                <button class="tab-btn" onclick="switchRestockTab('bootleg')">Đĩa Lậu</button>
+                <button class="tab-btn" onclick="switchRestockTab('pack')">Bao Bì</button>
+            </div>
+
+            <div class="restock-scroll-list" id="restock-items-container"></div>
+
+            <div class="action-footer">
+                <div class="total-cost-row">
+                    <span>Tổng tiền nhập:</span>
+                    <strong id="total-restock-cost">0k</strong>
+                </div>
+                <button id="btn-start-shift" class="btn-main-red">NHẬP HÀNG & MỞ CỬA</button>
+            </div>
+        </section>
+
+        <!-- PHASE 2: GAMEPLAY -->
+        <section id="phase-game" class="app-body hidden">
+            <div class="game-top-bar">
+                <span class="timer-tag">Thời gian ca: <strong id="disp-timer">60s</strong></span>
+                <span class="status-badge">Đang mở cửa</span>
+            </div>
+
+            <div id="customer-area" class="customer-card"></div>
+
+            <div class="workbench-card">
+                <div class="wb-title">BÀN ĐÓNG GÓI</div>
+                <div class="wb-slots">
+                    <div class="slot-box wide">
+                        <small>ĐĨA GAME XẾP LÊN BÀN</small>
+                        <span id="slot-disc-text">Chưa chọn đĩa</span>
+                    </div>
+                    <div class="slot-box">
+                        <small>BAO BÌ</small>
+                        <span id="slot-pack-text">Chưa chọn</span>
+                    </div>
+                </div>
+                <div class="wb-btns">
+                    <button id="btn-clear-tray" class="btn-sub">HỦY KHAY</button>
+                    <button id="btn-out-of-stock" class="btn-outstock" onclick="rejectOutOfStock()">BÁO HẾT HÀNG</button>
+                    <button id="btn-serve-order" class="btn-action">GIAO HÀNG</button>
+                </div>
+            </div>
+
+            <div class="inventory-select-section">
+                <small class="section-label">CHỌN ĐĨA TRONG KHO HÀNG:</small>
+                <div class="stock-grid" id="grid-stock-select"></div>
+            </div>
+        </section>
+
+        <!-- PHASE 3: SUMMARY -->
+        <section id="phase-summary" class="app-body hidden">
+            <div class="section-banner center">
+                <h2>Tổng kết ngày <span id="sum-day">1</span></h2>
+                <p>Báo cáo doanh thu & lợi nhuận trong ngày.</p>
+            </div>
+
+            <div class="summary-card">
+                <div class="sum-item"><span>Doanh thu đĩa:</span><strong id="sum-revenue" class="text-green">+0k</strong></div>
+                <div class="sum-item"><span>Tiền Tip thưởng:</span><strong id="sum-tips" class="text-green">+0k</strong></div>
+                <div class="sum-item"><span>Chi phí nhập hàng:</span><strong id="sum-costs" class="text-red">-0k</strong></div>
+                <div class="sum-item"><span>Tiền phạt (nếu có):</span><strong id="sum-fines" class="text-red">-0k</strong></div>
+                <hr>
+                <div class="sum-item total"><span>LỢI NHUẬN RÒNG:</span><strong id="sum-profit">0k</strong></div>
+                <div class="sum-item"><span>Số đơn phục vụ:</span><strong id="sum-orders">0 đơn</strong></div>
+            </div>
+
+            <button id="btn-next-day" class="btn-main-red">SANG NGÀY TIẾP THEO</button>
+        </section>
+
+        <!-- MODAL CÔNG AN PHẠT -->
+        <div id="police-modal" class="modal-overlay-custom hidden">
+            <div class="modal-card-custom police-card">
+                <h2 class="police-title">CẢNH SÁT KIỂM TRA!</h2>
+                <p id="police-quote-text" class="police-quote"></p>
+                <div class="fine-box">
+                    <span>MỨC PHẠT VÀO NGÂN SÁCH:</span>
+                    <strong id="police-fine-amount" class="text-red">-0k</strong>
+                </div>
+                <button class="btn-main-red" onclick="confirmPoliceFine()">TÔI NỔP PHẠT & TẮT XƯỞNG LẬU</button>
+            </div>
+        </div>
+
+        <!-- MODAL GAME OVER -->
+        <div id="gameover-modal" class="modal-overlay-custom hidden">
+            <div class="modal-card-custom gameover-card">
+                <h2>GAME OVER</h2>
+                <p id="gameover-reason-text">Bạn đã phá sản!</p>
+                <button class="btn-main-red" onclick="restartFromGameOver()">CHƠI LẠI TỪ ĐẦU</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/final_data.js"></script>
+</body>
+</html>
